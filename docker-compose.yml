@@ -1,0 +1,18 @@
+services:
+  fws-server:
+    container_name: FWiki Server
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - 4000:4000
+
+  fws-db:
+    container_name: FWiki Database
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 27017:27017
