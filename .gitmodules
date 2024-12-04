@@ -1,3 +1,3 @@
 [submodule "server/py-utils"]
-	path = server/py-utils
+	path = server/kuro-utils-py
 	url = https://github.com/kuroji-fusky/kuro-utils-python.git
