@@ -1,17 +1,33 @@
-from typing import Literal, Optional, final
 from abc import ABC, abstractmethod
+from typing import Type, Literal, Optional, final
+import kuropy.kuro_fs as kuro_fs
 from utils import *
-from kuropy.kuro_fs import KuroFileHandler
 
 
-class PageStoreWorker(ABC, KuroFileHandler):
-    @abstractmethod
+# This one's very specific for this use case, but in the future, will be moved into the kuro_utils module
+_ClassType = TypeVar("_ClassType")
+
+
+def abstractclass(cls: Type[_ClassType]) -> _ClassType:
+    cls_dict = dict(cls.__dict__)
+
+    if "__init__" in cls_dict:
+        cls_dict["__init__"] = abstractmethod(cls_dict["__init__"])
+
+    return type(cls.__name__, (ABC,), cls_dict)
+
+
+@abstractclass
+class PageStoreWorker(kuro_fs.KuroFileHandler):
     def __init__(self):
+        self._load_file = self.read
+        self._write_file = self.write
+
         self.collected_pages = []
 
 
-class _TemplateParserWorker(ABC, PageStoreWorker):
-    @abstractmethod
+@abstractclass
+class _TemplateParserWorker(PageStoreWorker):
     def __init__(self):
         pass
 
@@ -44,7 +60,7 @@ class CrawlWorker(_TemplateParserWorker, PageStoreWorker):
         # Check if wiki is up and operational
         main_page = request_soup(f"https://{base_prefix}.{BASE_FANDOM_URL}", verbose=True)  # noqa
 
-        if main_page['ok']:
+        if main_page.ok:
             raise ConnectionRefusedError("Wiki closed for: <reason>")
 
         self._base_wiki_prefix = base_prefix
