@@ -1,3 +1,6 @@
 [submodule "server/py-utils"]
 	path = server/kuropy
-	url = https://github.com/kuroji-fusky/kuro-utils-python.git
+	url = https://github.com/kuroji-fusky/kuropy.git
+[submodule "client/client/kuro-ui"]
+	path = client/packages/kuro-ui
+	url = https://github.com/kuroji-fusky/kuro-ui.git
