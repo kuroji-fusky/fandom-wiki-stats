@@ -47,7 +47,7 @@ BASE_FANDOM_URL = "fandom.com"
 
 
 @final
-class CrawlWorker(_TemplateParserWorker, PageStoreWorker):
+class CrawlWorker(PageStoreWorker, _TemplateParserWorker):
     def __init__(self, base_prefix: str, *,
                  increment_page_cap: int = 50,
                  crawl_timeout: int = 10):
